@@ -1,0 +1,100 @@
+﻿#WebChatTitleBar {
+    width: 90%;
+    max-width: 800px;
+    height: 40px;
+    background-color: #3996dd;
+    text-align: left;
+    font-size: 20px;
+    color: white;
+    line-height: 40px;
+    padding-left: 10px;
+    float: right;
+    position: fixed;
+    right: 20px;
+    bottom: 90%;
+    z-index: 999;
+    _position: absolute; /* position fixed for IE6 */
+    display:none;
+}
+
+/* 放 webchat 的 div */
+#WebChatDialog {
+    float: right;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999;
+    _position: absolute; /* position fixed for IE6 */
+}
+
+/* 開 webchat 之前顯示的小圖示 */
+#WebChatButton {
+    border-radius: 99em;
+    display: block;
+    position: fixed;
+    background: url(https://bot-framework.azureedge.net/bot-icons-v1/bot-framework-default-7.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #FFFFFF;
+    background-size: cover;
+    color: black;
+    cursor: pointer;
+    width: 95px;
+    height: 95px;
+    float: right;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    _position: absolute; /* position fixed for IE6 */
+}
+
+/* webchat 所在位置 */
+#BotChatGoesHere {
+    border: 1px solid #333;
+    float: left;
+    height: 600px;
+    position: relative;
+    width: 460px;
+}
+
+/* 讓 header cursor 變成手的圖形 */
+.wc-header {
+    cursor: pointer;
+}
+
+/* 以下設定，在 webchat 中也出現 bot 的圖示 */
+.wc-message svg.wc-message-callout {
+    display: none;
+}
+
+/* from me */
+.wc-message-from-me .wc-message-content {
+    border-radius: 8px 0 8px 8px;
+}
+
+/* from bot */
+.wc-message-from-bot {
+    float: left;
+    margin-left: 50px;
+    position: relative;
+}
+
+.wc-message-from-bot .wc-message-content {
+    border-radius: 0px 12px 12px 12px;
+}
+
+.wc-message-from-bot .wc-message-content:before {
+    content: '';
+    position: absolute;
+    left: -40px;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 99em;
+    background-image: url(https://bot-framework.azureedge.net/bot-icons-v1/bot-framework-default-7.png);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
