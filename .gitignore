@@ -1,0 +1,10 @@
+**/obj
+**/Debug
+**/Release
+**/.vs
+**/packages
+**/bin
+*.suo
+**.user
+*.project
+*.pubxml

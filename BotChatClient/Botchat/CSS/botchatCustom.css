@@ -23,6 +23,7 @@
     position: fixed;
     right: 20px;
     bottom: 20px;
+    background-color: #ffffff;
     z-index: 999;
     _position: absolute; /* position fixed for IE6 */
 }
