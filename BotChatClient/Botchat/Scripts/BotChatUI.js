@@ -7,6 +7,7 @@ var WebChatDialogDivId = 'WebChatDialog';
 var conversationIdKey = 'conversationId';
 var BotChatUI = /** @class */ (function () {
     function BotChatUI(config) {
+        config.botChatIconUrl = config.botChatIconUrl || 'https://bot-framework.azureedge.net/bot-icons-v1/bot-framework-default-7.png';
         this.botChatUIConfig = config;
         var content = "<div ID=\"" + WebChatButtonDivId + "\" onclick=\"BotChatUI.onClickWebChatButton()\"></div><div id=\"" + WebChatDialogDivId + "\"></div>";
         var fragment = this.create(content);
@@ -46,6 +47,7 @@ var BotChatUI = /** @class */ (function () {
         return frag;
     };
     BotChatUI.prototype.startConversation = function () {
+        var _this = this;
         console.log('startConversation');
         var botChatGoesHereDiv = document.getElementById(BotChatGoesHereDivId);
         if (!botChatGoesHereDiv) {
@@ -70,6 +72,25 @@ var BotChatUI = /** @class */ (function () {
             bot: this.bot,
             botConnection: this.botConnection
         }, document.getElementById(BotChatGoesHereDivId));
+        var isLocal = this.botChatUIConfig.directLineOptions.domain.indexOf('webchat.botframework.com') === -1;
+        if (!conversationId && isLocal) {
+            setTimeout(function () {
+                _this.botConnection.postActivity({
+                    from: _this.user,
+                    membersAdded: [_this.bot],
+                    membersRemoved: [],
+                    type: "conversationUpdate"
+                }).subscribe(function (id) {
+                });
+                _this.botConnection.postActivity({
+                    from: _this.user,
+                    membersAdded: [_this.user],
+                    membersRemoved: [],
+                    type: "conversationUpdate"
+                }).subscribe(function (id) {
+                });
+            }, 100);
+        }
     };
     BotChatUI.prototype.endConversation = function () {
         console.log('endConversation');

@@ -2,7 +2,7 @@
 
 
 interface IBotChatUIConfig {
-    botId: string, 
+    botId: string,
     botName: string,
     userId: string,
     userName: string,
@@ -36,8 +36,9 @@ class BotChatUI {
     public user;
     public botConnection;
     public botChatUIConfig: IBotChatUIConfig;
-     
+
     constructor(config: IBotChatUIConfig) {
+        config.botChatIconUrl = config.botChatIconUrl || 'https://bot-framework.azureedge.net/bot-icons-v1/bot-framework-default-7.png';
         this.botChatUIConfig = config;
         const content = `<div ID="${WebChatButtonDivId}" onclick="BotChatUI.onClickWebChatButton()"></div><div id="${WebChatDialogDivId}"></div>`;
         var fragment = this.create(content);
@@ -67,14 +68,14 @@ class BotChatUI {
 
         //設定 webchat 中的機器人圖示
         const css = '.wc-message-from-bot .wc-message-content:before {background-image:' + `url(${config.botChatIconUrl});` + '}',
-        style = document.createElement('style');
+            style = document.createElement('style');
         style.type = 'text/css';
         style.appendChild(document.createTextNode(css));
         document.body.appendChild(style);
 
     }
 
-    
+
     private create(htmlStr) {
         var frag = document.createDocumentFragment(),
             temp = document.createElement('div');
@@ -103,7 +104,7 @@ class BotChatUI {
             this.botConnection.conversationId = conversationId;
         }
         this.botConnection.watermark = '';
-        
+
         BotChat.App({
             locale: this.botChatUIConfig.locale,
             resize: 'window',
@@ -112,6 +113,27 @@ class BotChatUI {
             bot: this.bot,
             botConnection: this.botConnection
         }, document.getElementById(BotChatGoesHereDivId));
+        const isLocal = this.botChatUIConfig.directLineOptions.domain.indexOf('webchat.botframework.com') === -1;
+        if (!conversationId && isLocal) {
+            setTimeout(() => {
+                this.botConnection.postActivity({
+                    from: this.user,
+                    membersAdded: [this.bot],
+                    membersRemoved: [],
+                    type: "conversationUpdate"
+                }).subscribe((id) => {
+
+                });
+                this.botConnection.postActivity({
+                    from: this.user,
+                    membersAdded: [this.user],
+                    membersRemoved: [],
+                    type: "conversationUpdate"
+                }).subscribe((id) => {
+
+                });
+            }, 100);
+        }
     }
 
     public endConversation() {
@@ -138,7 +160,7 @@ class BotChatUI {
         return false;
     }
 
-    
+
     //close webchat
     public static onClickWebChatHeader(e) {
         BotChatUI.isShowWebChat(false);
@@ -150,7 +172,7 @@ class BotChatUI {
     //是否顯示 WebChat
     public static isShowWebChat(isShow: boolean) {
         const webChatDialog = document.getElementById(WebChatDialogDivId);
-         if (isShow) {
+        if (isShow) {
             webChatDialog.style.visibility = 'visible';
         } else {
             webChatDialog.style.visibility = 'hidden';
